@@ -1,27 +1,29 @@
-/*
- * Copyright (c) 2024 Your Name
- * SPDX-License-Identifier: Apache-2.0
- */
-
-`default_nettype none
-
-module tt_um_example (
-    input  wire [7:0] ui_in,    // Dedicated inputs
-    output wire [7:0] uo_out,   // Dedicated outputs
-    input  wire [7:0] uio_in,   // IOs: Input path
-    output wire [7:0] uio_out,  // IOs: Output path
-    output wire [7:0] uio_oe,   // IOs: Enable path (active high: 0=input, 1=output)
-    input  wire       ena,      // always 1 when the design is powered, so you can ignore it
-    input  wire       clk,      // clock
-    input  wire       rst_n     // reset_n - low to reset
+module counter (
+    input  wire        clk,        // System clock
+    input  wire        rst_n,      // Active-low synchronous reset
+    input  wire        load,       // Parallel load enable (synchronous)
+    input  wire        clk_en,     // Count enable (synchronous)
+    input  wire [7:0]  load_data,  // Data to be loaded in parallel
+    input  wire        oe,         // Output enable (when 1, outputs drive; when 0, Z)
+    output wire [7:0]  bus         // Tri-state bus
 );
 
-  // All output pins must be assigned. If not used, assign to 0.
-  assign uo_out  = ui_in + uio_in;  // Example: ou_out is the sum of ui_in and uio_in
-  assign uio_out = 0;
-  assign uio_oe  = 0;
+    // Internal register to hold the count value
+    reg [7:0] count_reg;
 
-  // List all unused inputs to prevent warnings
-  wire _unused = &{ena, clk, rst_n, 1'b0};
+    // Synchronous process: reset, load, or count
+    always @(posedge clk) begin
+        if (!rst_n) begin
+            count_reg <= 8'b0;
+        end else if (load) begin
+            count_reg <= load_data;
+        end else if (clk_en) begin
+            count_reg <= count_reg + 1'b1;
+        end
+        // If neither reset, load, nor clk_en, hold current value
+    end
+
+    // Tri-state driver: when oe=1, drive count_reg; when oe=0, high-impedance
+    assign bus = (oe) ? count_reg : 8'bz;
 
 endmodule
