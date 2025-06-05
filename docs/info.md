@@ -43,32 +43,40 @@ Upon powering up the chip:
 
 ### Key Components
 
-### 1. 32-bit Register Memory
+1.  **32-bit Register Memory**
 
 - Stores the color sequence (16 values × 2 bits).
 
-### 2. 7-bit Linear Feedback Shift Register (LFSR)
+2. **7-bit Linear Feedback Shift Register (LFSR)**
 
-- Generates a pseudo-random 32-bit sequence.
-- Uses a 7th-order primitive polynomial to ensure maximal length (2⁷ - 1 = 127 values).
-- Special logic ensures the state never becomes all zeros.
-- Seeded externally to vary game sequences across resets and sessions.
+   - Generates a pseudo-random 32-bit sequence.
+   - Uses a 7th-order primitive polynomial to ensure maximal length (2⁷ - 1 = 127 values).
+   - Special logic ensures the state never becomes all zeros.
+   - Seeded externally to vary game sequences across resets and sessions.
 
-### 3. Color Encoder/Decoder
+3. **Color Encoder/Decoder**
 
-- Converts 4 individual button signals into a single 2-bit color value for logic comparison (and vice versa).
-- Ensures consistent color encoding across modules.
+   - Converts 4 individual button signals into a single 2-bit color value for logic comparison (and vice versa).
+   - Ensures consistent color encoding across modules.
 
-### 4. Finite State Machine (FSM)
+4. **Finite State Machine (FSM)**
 
-- Controls game logic and transitions:
-  - Idle → Display → Wait → Check → Display (next round) or Game Over
-- Prevents invalid state transitions.
+   - Controls game logic and transitions:
+     - Idle → Display → Wait → Check → Display (next round) or Game Over
+   - Prevents invalid state transitions.
 
-### 5. State Encoder
+5. **State Encoder**
 
-- Maps current FSM state to a 2-bit output for debugging.
-- Enables us to monitor game progress externally.
+   - Maps current FSM state to a 2-bit output for debugging.
+   - Enables us to monitor game progress externally.
+
+### Block Diagram
+
+![Block Diagram](<SimonSays_BlockDiagram%20(2).jpg>)
+
+### I/O Table
+
+![I/O Table](SimonSays_IOTable.png)
 
 ## How to test
 
