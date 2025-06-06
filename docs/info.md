@@ -80,10 +80,35 @@ Upon powering up the chip:
 
 ## How to test
 
-- **Game Win**: Verify that correct input allows all 16 rounds to be completed.
-- **Game Loss**: Enter incorrect sequence to ensure game ends early.
-- **Reset Handling**: Press `reset` during any state and confirm game restarts properly.
-- **State Transitions**: Monitor `state_debug` outputs to verify correct FSM sequencing.
+### Gameplay Functionality
+
+- Simulate a full 16-round win by entering the correct sequence each round — system should complete all rounds and then return to IDLE.
+- Enter an incorrect input during, for example, round 5 — system should terminate the game and return to IDLE.
+- During each DISPLAY phase, ensure the LEDs light up in the correct order that matches the LFSR-generated sequence.
+- Press multiple color buttons simultaneously — system should either reject the input or only register one color.
+
+### Finite State Machine Transitions
+
+- After leaving IDLE, verify the sequence of state transitions:
+  - DISPLAY → WAIT → CHECK → (DISPLAY if correct input, IDLE if incorrect input)
+- The FSM should correctly:
+  - Show the color sequence
+  - Wait for the user's button inputs
+  - Check the inputs against the stored sequence
+  - Advance to the next round if correct, or end the game if incorrect
+
+### Startup and Seeding
+
+- Power on the chip without pressing the start button — system should remain in IDLE.
+- Provide a valid 7-bit seed via the bidirectional bus and then press start — FSM should leave IDLE, generate a 32-bit color sequence using the LFSR, and proceed to the DISPLAY state (which can be seen through the state_debug value).
+- Apply the same 7-bit seed multiple times — the LFSR should generate the same 32-bit sequence each time.
+- Apply different seeds — the generated color sequence should differ each time, confirming LFSR randomness and external seed functionality.
+
+### Reset Handling
+
+- Press reset while in IDLE — system should remain in IDLE and clear any stored sequence or state.
+- Press reset during DISPLAY, WAIT, or CHECK — system should reset immediately and return to IDLE, discarding the current game state.
+- Hold reset while pressing start — system should not start the game until reset is released.
 
 ## External hardware
 
