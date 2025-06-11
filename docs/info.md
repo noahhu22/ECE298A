@@ -72,11 +72,17 @@ Upon powering up the chip:
 
 ### Block Diagram
 
-![Block Diagram](<SimonSays_BlockDiagram%20(2).jpg>)
+![Block Diagram](SimonSays_BlockDiagram.drawio.png)
 
 ### I/O Table
 
 ![I/O Table](SimonSays_IOTable.png)
+
+### Timing Diagram
+
+Below shows the expected timing diagram for one loop of the game. It transitions between the IDLE, DISPLAY, WAIT, and CHECK states and then resets for next loop.
+![Timing Diagram](TimingDiagram.png)<br>
+Note, much of the timing relies on user input so the displayed state durations may not match the lengths during gameplay. A random LFSR Seed of 0x5B is loaded along with a current display sequence of 1, 4, 1, 8 or (0b0001, 0b0100, 0b0001, 0b1000).
 
 ## How to test
 
