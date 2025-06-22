@@ -2,34 +2,6 @@ module dff(output reg q, input d, input clk, input en);
     always @(posedge clk) if (en) q <= d;
 endmodule
 
-module mux2to1 (
-    input wire sel,        // Select line
-    input wire a, b,       // Inputs
-    output wire y          // Output
-);
-
-assign y = sel ? b : a;    // If sel = 0, y = a; if sel = 1, y = b
-
-endmodule
-
-module t_flip_flop (
-    input wire clk,
-    input wire reset, // asynchronous reset
-    input wire T,
-    output reg Q
-);
-
-always @(posedge clk or posedge reset) begin
-    if (reset)
-        Q <= 1'b0;
-    else if (T)
-        Q <= ~Q; // Toggle
-    // else Q stays the same
-end
-
-endmodule
-
-
 module LFSR(
     input  wire [6:0] LFSR_SEED, // Seed value to load
     input  wire       clk,
