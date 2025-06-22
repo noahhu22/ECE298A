@@ -9,8 +9,19 @@ module counter (
 );
 
     // Internal register to hold the count value
-    reg [7:0] count_reg;
+    //reg [7:0] count_reg;
 
+    //test instantiate lfsr
+    LFSR lfsr_inst (
+        .LFSR_SEED(lfsr_seed),
+        .clk(clk),
+        .rst(~rst_n),        // Assuming LFSR uses active-high reset
+        .enable(clk_en),     // Or another enable signal as appropriate
+        .LFSR_OUT(lfsr_out),
+        .complete_LFSR(lfsr_complete)
+    );
+
+    /*
     // Synchronous process: reset, load, or count
     always @(posedge clk) begin
         if (!rst_n) begin
@@ -25,5 +36,6 @@ module counter (
 
     // Tri-state driver: when oe=1, drive count_reg; when oe=0, high-impedance
     assign bus = (oe) ? count_reg : 8'bz;
+    */
 
 endmodule
