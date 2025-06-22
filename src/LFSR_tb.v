@@ -31,6 +31,8 @@ initial begin
     $dumpvars(0, test);
 
     #1 enable = 1;
+    #1 rst = 1; 
+    #1 rst = 0; // Release reset
     #90 rst = 1; // Reset the LFSR
     #1 rst = 0;
 

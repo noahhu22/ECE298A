@@ -1,5 +1,10 @@
-module dff(output reg q, input d, input clk, input en);
-    always @(posedge clk) if (en) q <= d;
+module dff(output reg q, input d, input clk, input en, input rst);
+    always @(posedge clk or posedge rst) begin
+        if (rst)
+            q <= 1'b0;
+        else if (en)
+            q <= d;
+    end
 endmodule
 
 module LFSR(
