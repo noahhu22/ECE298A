@@ -22,6 +22,7 @@ module tt_um_simonsays (
   wire Q_0, Q_1, Q_2, Q_3, Q_4, Q_5, Q_6, Q_7;
   wire ena_0, ena_1, ena_2, ena_3, ena_4, ena_5, ena_6, ena_7;
   wire l0, l1, l2, l3, l4, l5, l6, l7;
+  wire lfsr_complete;
 
 
   assign l0 = base[0] ^ Q_0;
@@ -82,7 +83,6 @@ module tt_um_simonsays (
   // All output pins must be assigned. If not used, assign to 0.
   // assign uo_out  = ui_in + uio_in;  // Example: ou_out is the sum of ui_in and uio_in
   assign uo_out = ena? {Q_7, Q_6, Q_5, Q_4, Q_3, Q_2, Q_1, Q_0} : 8'bz; // Example: ou_out is the output of the T flip-flop
-  assign uio_out = 0;
   assign uio_oe  = 0;
 
   // List all unused inputs to prevent warnings
