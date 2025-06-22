@@ -7,9 +7,9 @@ module LFSR (
     output complete_LFSR
 );
 
-    reg [6:0] LFSR_out_next = 7'b0; // Next value to be assigned
-    reg complete_LFSR_reg = 1'b0; // Register to hold completion status
-    reg [3:0] count = 4'b0; // Counter to track the number of cycles
+    // reg [6:0] LFSR_out_next = 7'b0; // Next value to be assigned
+    // reg complete_LFSR_reg = 1'b0; // Register to hold completion status
+    // reg [3:0] count = 4'b0; // Counter to track the number of cycles
 
     always @(posedge clk or posedge rst) begin
         if (rst) begin
