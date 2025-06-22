@@ -1,4 +1,4 @@
-module LFSR (
+module LFSR_OLD (
     input [6:0] LFSR_SEED, // Load value
     input clk,
     input rst,
