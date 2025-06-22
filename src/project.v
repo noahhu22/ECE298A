@@ -118,4 +118,3 @@ module mux2to1 (
 assign y = sel ? b : a;    // If sel = 0, y = a; if sel = 1, y = b
 
 endmodule
-  
