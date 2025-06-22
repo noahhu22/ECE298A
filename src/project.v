@@ -69,7 +69,7 @@ module tt_um_simonsays (
   mux2to1 mux_6(.sel(load), .a(ena_6), .b(l6), .y(T_6));
   mux2to1 mux_7(.sel(load), .a(ena_7), .b(l7), .y(T_7));
   
-    LFSR lfsr_inst (
+    LFSR_OLD lfsr_inst (
         .LFSR_SEED(ui_in[6:0]), // Use the first 7 bits of ui_in as the seed
         .clk(clk),
         .rst(~rst_n), // Active low reset
