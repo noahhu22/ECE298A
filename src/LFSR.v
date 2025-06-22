@@ -11,6 +11,11 @@ module LFSR (
     // reg complete_LFSR_reg = 1'b0; // Register to hold completion status
     // reg [3:0] count = 4'b0; // Counter to track the number of cycles
 
+    reg [6:0] LFSR_out_next; // Next value to be assigned
+    reg complete_LFSR_reg; // Register to hold completion status
+    reg [3:0] count; // Counter to track the number of cycles
+
+
     always @(posedge clk or posedge rst) begin
         if (rst) begin
             LFSR_out_next <= LFSR_SEED; // Load the seed value on reset
@@ -25,12 +30,10 @@ module LFSR (
             end else begin
                 // 7-bit LFSR with taps at bits 7 and 6 (primitive polynomial x^7 + x^6 + 1)
                 LFSR_out_next <= {LFSR_out_next[5:0], LFSR_out_next[6] ^ LFSR_out_next[5]};
-                if (count < 7 && !complete_LFSR_reg) begin
-                    count <= count + 1;
-                    complete_LFSR_reg <= 1'b0;
-                end else if (count == 7) begin
-                    complete_LFSR_reg <= 1'b1; // Set complete after 8 shifts
-                end
+                    if (count < 6)
+                        count <= count + 1;
+                    else
+                        complete_LFSR_reg <= 1;
             end
         end
         // else: hold value (do nothing)
