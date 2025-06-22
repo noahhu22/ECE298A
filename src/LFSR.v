@@ -18,7 +18,7 @@ module LFSR (
             count <= 4'b0; // Reset the cycle counter
         end else if (!enable) begin
             // If not enabled, hold the current value
-            LFSR_out_next <= 7'bz; // Maintain current state
+            LFSR_out_next <= 7'b0; // Maintain current state
             complete_LFSR_reg <= 0; // Maintain completion status
             count <= 0; // Maintain cycle count
         end else if (enable && !complete_LFSR_reg) begin
