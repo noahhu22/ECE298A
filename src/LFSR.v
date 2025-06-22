@@ -16,11 +16,6 @@ module LFSR (
             //LFSR_out_next <= LFSR_SEED; // Load the seed value on reset
             complete_LFSR_reg <= 1'b0; // Reset completion status
             count <= 4'b0; // Reset the cycle counter
-        end else if (!enable) begin
-            // If not enabled, hold the current value
-            LFSR_out_next <= 7'b0; // Maintain current state
-            complete_LFSR_reg <= 0; // Maintain completion status
-            count <= 0; // Maintain cycle count
         end else if (enable && !complete_LFSR_reg) begin
             // If all zeros, reload the seed
             if (LFSR_out_next == 7'b0000000) begin
