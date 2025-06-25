@@ -8,8 +8,8 @@ module colour_decoder (
 
     // colour[1] goes high for Yellow or Green
     assign ui[0] = ~colour[0] & ~colour[1];             // ui[0] = red    
-    assign ui[1] = ~colour[0] & colour[1];              // ui[1] = blue
-    assign ui[2] = colour[0] & ~colour[1];              // ui[2] = yellow
+    assign ui[1] = colour[0] & ~colour[1];              // ui[1] = blue
+    assign ui[2] = ~colour[0] & colour[1];              // ui[2] = yellow
     assign ui[3] = colour[0] & colour[1];               // ui[3] = green
 
 endmodule
