@@ -13,12 +13,12 @@ module tt_um_simonsays (
 );
 
     // Instantiate only the LFSR_OLD module and connect all I/O
-    LFSR_OLD lfsr_inst (
-        .LFSR_SEED(ui_in[6:0]),      // Use the first 7 bits of ui_in as the seed
+    LFSR lfsr_inst (
+        .LFSR_SEED(ui_in[7:0]),      // Use the first 7 bits of ui_in as the seed
         .clk(clk),
         .rst(~rst_n),                // Active low reset
         .enable(ena),                // Enable signal
-        .LFSR_OUT(uio_out[6:0]),     // Output the LFSR value to uio_out[6:0]
+        .LFSR_OUT(uio_out[7:0]),     // Output the LFSR value to uio_out[6:0]
         .complete_LFSR(uio_out[7])   // Indicate completion in the last bit of uio_out
     );
 
