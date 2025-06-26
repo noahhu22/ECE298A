@@ -16,7 +16,7 @@ module LFSR_OLD (
     reg [3:0] count; // Counter to track the number of cycles
 
 
-    always @(posedge clk or posedge rst) begin
+    always @(posedge clk) begin
         if (rst) begin
             LFSR_out_next <= LFSR_SEED; // Load the seed value on reset
             complete_LFSR_reg <= 1'b0; // Reset completion status
