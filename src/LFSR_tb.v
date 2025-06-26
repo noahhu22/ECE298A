@@ -12,7 +12,7 @@ wire feedback;
 assign feedback = LFSR_OUT[7] ^ LFSR_OUT[5] ^ LFSR_OUT[4] ^ LFSR_OUT[3];
 
 // Instantiate the LFSR module
-LFSR_OLD uut (
+LFSR uut (
     .LFSR_SEED(LFSR_SEED),
     .clk(clk),
     .rst(rst),
