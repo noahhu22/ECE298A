@@ -29,7 +29,7 @@ module LFSR (
                 count <= 4'b0;
             end else begin
                 // 7-bit LFSR with taps at bits 7 and 6 (primitive polynomial x^7 + x^6 + 1)
-                LFSR_out_next <= {LFSR_out_next[5:0], LFSR_out_next[7] ^ LFSR_out_next[5] ^ LFSR_out_next[4] ^ LFSR_out_next[3]};
+                LFSR_out_next <= {LFSR_out_next[6:0], LFSR_out_next[7] ^ LFSR_out_next[5] ^ LFSR_out_next[4] ^ LFSR_out_next[3]};
                     if (count < 6)
                         count <= count + 1;
                     else
