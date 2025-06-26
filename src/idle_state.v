@@ -13,8 +13,8 @@ module IDLE_STATE(
 
 wire [1:0] count = 2'b00; 
 
-always @(posedge clk or posedge rst_IDLE)begin
-    if(rst)
+always @(posedge clk)begin
+    if(rst_IDLE)
         en_LFSR <= 1'b0;
         32b_MEM_IN <= 32'b0;
         32b_MEM_LOAD <= 1'b0;
