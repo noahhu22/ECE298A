@@ -1,12 +1,14 @@
 module tt_um_simonsays (
-    input  wire        clk,        // System clock
-    input  wire        rst_n,      // Active-low synchronous reset
-    input  wire        load,       // Parallel load enable (synchronous)
-    input  wire        clk_en,     // Count enable (synchronous)
-    input  wire [7:0]  load_data,  // Data to be loaded in parallel
-    input  wire        oe,         // Output enable (when 1, outputs drive; when 0, Z)
-    input  wire        ena,        // enable signal
-    output wire [7:0]  bus         // Tri-state bus
+    input  wire       clk_en,   // Count enable (synchronous)
+    input  wire       clk,      // clock
+    input  wire       oe,       // Output enable (when 1, outputs drive; when 0, Z)
+    input  wire [7:0] ui_in,    // Dedicated inputs
+    output wire [7:0] uo_out,   // Dedicated outputs
+    input  wire [7:0] uio_in,   // IOs: Input path
+    output wire [7:0] uio_out,  // IOs: Output path
+    output wire [7:0] uio_oe,   // IOs: Enable path (active high: 0=input, 1=output)
+    input  wire       ena,      // always 1 when the design is powered, so you can ignore it
+    input  wire       rst_n     // reset_n - low to reset
 );
 
     // Internal register to hold the count value
