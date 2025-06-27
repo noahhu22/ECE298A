@@ -1,7 +1,5 @@
 module tt_um_simonsays (
-    input  wire       clk_en,   // Count enable (synchronous)
     input  wire       clk,      // clock
-    input  wire       oe,       // Output enable (when 1, outputs drive; when 0, Z)
     input  wire [7:0] ui_in,    // Dedicated inputs
     output wire [7:0] uo_out,   // Dedicated outputs
     input  wire [7:0] uio_in,   // IOs: Input path
