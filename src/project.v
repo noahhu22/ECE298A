@@ -8,22 +8,19 @@ module counter (
     output wire [7:0]  bus         // Tri-state bus
 );
 
-    // Internal register to hold the count value
-    reg [7:0] count_reg;
+    wire [31:0] sequence_out;
+    WAIT_STATE ws(
+        .clk(clk),
+        .rst(~rst_n), // invert if WAIT_STATE expects active-high reset
+        .en(clk_en),
+        .colour_in(/* connect appropriate signal */),
+        .colour_val(load_data[1:0]),
+        .sequence_len(load_data[3:0]),
+        .complete_wait(bus[0]),
+        .sequence(sequence_out)
+    );
 
-    // Synchronous process: reset, load, or count
-    always @(posedge clk) begin
-        if (!rst_n) begin
-            count_reg <= 8'b0;
-        end else if (load) begin
-            count_reg <= load_data;
-        end else if (clk_en) begin
-            count_reg <= count_reg + 1'b1;
-        end
-        // If neither reset, load, nor clk_en, hold current value
-    end
-
-    // Tri-state driver: when oe=1, drive count_reg; when oe=0, high-impedance
-    assign bus = (oe) ? count_reg : 8'bz;
+    // Example tri-state bus assignment (implement as needed)
+    // assign bus = oe ? sequence_out[7:0] : 8'bz;
 
 endmodule
