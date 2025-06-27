@@ -5,6 +5,7 @@ module tt_um_simonsays (
     input  wire        clk_en,     // Count enable (synchronous)
     input  wire [7:0]  load_data,  // Data to be loaded in parallel
     input  wire        oe,         // Output enable (when 1, outputs drive; when 0, Z)
+    input  wire        ena,        // enable signal
     output wire [7:0]  bus         // Tri-state bus
 );
 
