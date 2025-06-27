@@ -1,4 +1,4 @@
-module counter (
+module simonsays (
     input  wire        clk,        // System clock
     input  wire        rst_n,      // Active-low synchronous reset
     input  wire        load,       // Parallel load enable (synchronous)
