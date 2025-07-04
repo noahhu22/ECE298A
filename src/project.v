@@ -1,29 +1,31 @@
-module counter (
-    input  wire        clk,        // System clock
-    input  wire        rst_n,      // Active-low synchronous reset
-    input  wire        load,       // Parallel load enable (synchronous)
-    input  wire        clk_en,     // Count enable (synchronous)
-    input  wire [7:0]  load_data,  // Data to be loaded in parallel
-    input  wire        oe,         // Output enable (when 1, outputs drive; when 0, Z)
-    output wire [7:0]  bus         // Tri-state bus
+
+`default_nettype none
+
+module tt_um_simonsays (
+    input  wire [7:0] ui_in,    // Dedicated inputs
+    output wire [7:0] uo_out,   // Dedicated outputs
+    input  wire [7:0] uio_in,   // IOs: Input path
+    output wire [7:0] uio_out,  // IOs: Output path
+    output wire [7:0] uio_oe,   // IOs: Enable path (active high: 0=input, 1=output)
+    input  wire       ena,      // always 1 when the design is powered, so you can ignore it
+    input  wire       clk,      // clock
+    input  wire       rst_n     // reset_n - low to reset
 );
 
-    // Internal register to hold the count value
-    reg [7:0] count_reg;
+  wire lfsr_comp;
+  
+    // Instantiate only the LFSR_OLD module and connect all I/O
+    LFSR lfsr_inst (
+        .LFSR_SEED(ui_in[7:0]),      // Use the first 7 bits of ui_in as the seed
+        .clk(clk),
+        .rst(~rst_n),                // Active low reset
+        .enable(ena),                // Enable signal
+        .LFSR_OUT(uo_out[7:0]),     // Output the LFSR value to uio_out[6:0]
+        .complete_LFSR(lfsr_comp)   // Indicate completion in the last bit of uio_out
+    );
 
-    // Synchronous process: reset, load, or count
-    always @(posedge clk) begin
-        if (!rst_n) begin
-            count_reg <= 8'b0;
-        end else if (load) begin
-            count_reg <= load_data;
-        end else if (clk_en) begin
-            count_reg <= count_reg + 1'b1;
-        end
-        // If neither reset, load, nor clk_en, hold current value
-    end
-
-    // Tri-state driver: when oe=1, drive count_reg; when oe=0, high-impedance
-    assign bus = (oe) ? count_reg : 8'bz;
+    // All output pins must be assigned. If not used, assign to 0.
+    assign uio_out  = {7'b0, lfsr_comp};
+    assign uio_oe  = 8'b1111_1111; // All uio_out pins are outputs
 
 endmodule
