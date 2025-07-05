@@ -25,9 +25,9 @@ module tt_um_simonsays (
     wire en_LFSR;
 
     //IDLE 
-    wire en_IDLE = ui_in[6]; // temp
-    wire rst_IDLE = ui_in[6]; // temp
-    wire complete_IDLE = ui_in[6]; // temp
+    wire en_IDLE; // temp
+    wire rst_IDLE; // temp
+    wire complete_IDLE; // temp
 
     //32bMEM
     wire MEM_LOAD;
@@ -58,8 +58,11 @@ module tt_um_simonsays (
     );
 
 
+    assign en_IDLE = start; // Enable IDLE state when start is pressed
+    assign rst_IDLE = reset; // Reset IDLE state when reset is pressed
+
     // All output pins must be assigned. If not used, assign to 0.
     assign uo_out  = MEM_IN;
     assign uio_oe  = 8'b1111_1111; // All uio_out pins are outputs
-    assign uio_out = 8'b0;
+    assign uio_out = {7'b0, complete_IDLE};
 endmodule
