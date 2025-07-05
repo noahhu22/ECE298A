@@ -25,9 +25,9 @@ module tt_um_simonsays (
     wire en_LFSR;
 
     //IDLE 
-    wire en_IDLE;
-    wire rst_IDLE;
-    wire complete_IDLE;
+    wire en_IDLE = ui_in[6]; // temp
+    wire rst_IDLE = ui_in[6]; // temp
+    wire complete_IDLE = ui_in[6]; // temp
 
     //32bMEM
     wire MEM_LOAD;
@@ -38,7 +38,7 @@ module tt_um_simonsays (
     LFSR lfsr(
         .LFSR_SEED(LFSR_SEED),      // Use the first 7 bits of ui_in as the seed
         .clk(clk),
-        .rst(rst_n),                // Active low reset
+        .rst(~rst_n),                // Active low reset
         .enable(ena),                // Enable signal
         .LFSR_OUT(LFSR_out),     // Output the LFSR value to uio_out[6:0]
         .complete_LFSR(complete_LFSR)   // Indicate completion in the last bit of uio_out
@@ -61,4 +61,5 @@ module tt_um_simonsays (
     // All output pins must be assigned. If not used, assign to 0.
     assign uo_out  = MEM_IN;
     assign uio_oe  = 8'b1111_1111; // All uio_out pins are outputs
+    assign uio_out = 8'b0;
 endmodule
