@@ -79,7 +79,7 @@ module tt_um_simonsays (
         .MEM_OUT(MEM_OUT)
     );
 
-    WAIT_STATE wait(
+    WAIT_STATE wait_state(
         .clk(clk),
         .rst(rst_WAIT),
         .en(en_WAIT),
@@ -95,8 +95,8 @@ module tt_um_simonsays (
     assign rst_MEM = reset;
     assign en_WAIT = start;
     assign rst_WAIT = reset;
-    assign colour_in_WAIT = {start, reset};
-    assign colour_val_WAIT= {start, start, start};
+    assign colour_in_WAIT = {reset};
+    assign colour_val_WAIT= {start, start};
     assign seq_len = {start, start, start, start};
 
     //temp to make sure wait seq out used 
