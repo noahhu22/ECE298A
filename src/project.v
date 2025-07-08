@@ -33,6 +33,8 @@ module tt_um_simonsays (
     wire MEM_LOAD;
     wire [7:0]MEM_IN; // load 8 bits at a time
     wire [1:0]MEM_LOAD_VAL;
+    wire rst_MEM;
+    wire [31:0]MEM_OUT;
 
 
     LFSR lfsr(
@@ -57,12 +59,26 @@ module tt_um_simonsays (
         .MEM_LOAD_VAL(MEM_LOAD_VAL)
     );
 
+    MEM mem(
+        .clk(clk),
+        .MEM_LOAD(MEM_LOAD),
+        .MEM_IN(MEM_IN),
+        .rst_MEM(rst_MEM),
+        .MEM_LOAD_VAL(MEM_LOAD_VAL),
+        .MEM_OUT(MEM_OUT)
+    );
 
     assign en_IDLE = start; // Enable IDLE state when start is pressed
     assign rst_IDLE = reset; // Reset IDLE state when reset is pressed
+    assign rst_MEM = reset;
+
+    //temp to make sure mem out signals are used
+    wire mem_out_xor;
+    assign mem_out_xor = ^MEM_OUT; // Reduction XOR operator
+
 
     // All output pins must be assigned. If not used, assign to 0.
     assign uo_out  = MEM_IN;
     assign uio_oe  = 8'b1111_1111; // All uio_out pins are outputs
-    assign uio_out = {7'b0, complete_IDLE};
+    assign uio_out = {6'b0, mem_out_xor, complete_IDLE};
 endmodule
