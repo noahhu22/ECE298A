@@ -36,6 +36,17 @@ module tt_um_simonsays (
     wire rst_MEM;
     wire [31:0]MEM_OUT;
 
+    //WAIT
+    wire en_WAIT;
+    wire rst_WAIT;
+    wire [31:0] seq_out_WAIT;
+    wire [3:0] seq_len;
+    wire [1:0] colour_val_WAIT;
+    wire colour_in_WAIT;
+    wire complete_wait;
+    
+
+
 
     LFSR lfsr(
         .LFSR_SEED(LFSR_SEED),      // Use the first 7 bits of ui_in as the seed
@@ -68,9 +79,30 @@ module tt_um_simonsays (
         .MEM_OUT(MEM_OUT)
     );
 
+    WAIT_STATE wait_state(
+        .clk(clk),
+        .rst(rst_WAIT),
+        .en(en_WAIT),
+        .colour_in(colour_in_WAIT),
+        .colour_val(colour_val_WAIT),
+        .sequence_len(seq_len),
+        .complete_wait(complete_wait),
+        .sequence_val(seq_out_WAIT)
+    );
+
     assign en_IDLE = start; // Enable IDLE state when start is pressed
     assign rst_IDLE = reset; // Reset IDLE state when reset is pressed
     assign rst_MEM = reset;
+    assign en_WAIT = start;
+    assign rst_WAIT = reset;
+    assign colour_in_WAIT = {reset};
+    assign colour_val_WAIT= {start, start};
+    assign seq_len = {start, start, start, start};
+
+    //temp to make sure wait seq out used 
+    wire wait_seq_out_xor;
+    assign wait_seq_out_xor = ^ seq_out_WAIT; 
+
 
     //temp to make sure mem out signals are used
     wire mem_out_xor;
@@ -80,5 +112,5 @@ module tt_um_simonsays (
     // All output pins must be assigned. If not used, assign to 0.
     assign uo_out  = MEM_IN;
     assign uio_oe  = 8'b1111_1111; // All uio_out pins are outputs
-    assign uio_out = {6'b0, mem_out_xor, complete_IDLE};
+    assign uio_out = {5'b0, wait_seq_out_xor, mem_out_xor, complete_IDLE};
 endmodule
