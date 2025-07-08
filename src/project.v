@@ -87,7 +87,7 @@ module tt_um_simonsays (
         .colour_val(colour_val_WAIT),
         .sequence_len(seq_len),
         .complete_wait(complete_wait),
-        .sequence(seq_out_WAIT)
+        .sequence_val(seq_out_WAIT)
     );
 
     assign en_IDLE = start; // Enable IDLE state when start is pressed
