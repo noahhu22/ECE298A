@@ -1,29 +1,68 @@
-module counter (
-    input  wire        clk,        // System clock
-    input  wire        rst_n,      // Active-low synchronous reset
-    input  wire        load,       // Parallel load enable (synchronous)
-    input  wire        clk_en,     // Count enable (synchronous)
-    input  wire [7:0]  load_data,  // Data to be loaded in parallel
-    input  wire        oe,         // Output enable (when 1, outputs drive; when 0, Z)
-    output wire [7:0]  bus         // Tri-state bus
+
+`default_nettype none
+
+module tt_um_simonsays (
+    input  wire [7:0] ui_in,    // Dedicated inputs
+    output wire [7:0] uo_out,   // Dedicated outputs
+    input  wire [7:0] uio_in,   // IOs: Input path
+    output wire [7:0] uio_out,  // IOs: Output path
+    output wire [7:0] uio_oe,   // IOs: Enable path (active high: 0=input, 1=output)
+    input  wire       ena,      // always 1 when the design is powered, so you can ignore it
+    input  wire       clk,      // clock
+    input  wire       rst_n     // reset_n - low to reset
 );
 
-    // Internal register to hold the count value
-    reg [7:0] count_reg;
+  // Local Signals
+    //Input
+    wire [3:0] colour_dec_in = ui_in[3:0];                // 4-bit input for colour decoding
+    wire reset = ui_in[4];                             // Reset signal
+    wire start = ui_in[5];                                // Start signal
+    wire [7:0] LFSR_SEED = uio_in[7:0];
 
-    // Synchronous process: reset, load, or count
-    always @(posedge clk) begin
-        if (!rst_n) begin
-            count_reg <= 8'b0;
-        end else if (load) begin
-            count_reg <= load_data;
-        end else if (clk_en) begin
-            count_reg <= count_reg + 1'b1;
-        end
-        // If neither reset, load, nor clk_en, hold current value
-    end
+    //LFSR
+    wire [7:0] LFSR_out;
+    wire complete_LFSR;                                      // LFSR completion signal
+    wire en_LFSR;
 
-    // Tri-state driver: when oe=1, drive count_reg; when oe=0, high-impedance
-    assign bus = (oe) ? count_reg : 8'bz;
+    //IDLE 
+    wire en_IDLE; // temp
+    wire rst_IDLE; // temp
+    wire complete_IDLE; // temp
 
+    //32bMEM
+    wire MEM_LOAD;
+    wire [7:0]MEM_IN; // load 8 bits at a time
+    wire [1:0]MEM_LOAD_VAL;
+
+
+    LFSR lfsr(
+        .LFSR_SEED(LFSR_SEED),      // Use the first 7 bits of ui_in as the seed
+        .clk(clk),
+        .rst(~rst_n),                // Active low reset
+        .enable(ena),                // Enable signal
+        .LFSR_OUT(LFSR_out),     // Output the LFSR value to uio_out[6:0]
+        .complete_LFSR(complete_LFSR)   // Indicate completion in the last bit of uio_out
+    );
+
+    IDLE_STATE idle(
+        .clk(clk),
+        .en_IDLE(en_IDLE),
+        .rst_IDLE(rst_IDLE),
+        .complete_LFSR(complete_LFSR),
+        .LFSR_output(LFSR_out), // Use the first 7 bits of LFSR output
+        .en_LFSR(en_LFSR),
+        .MEM_IN(MEM_IN), // Load the LFSR output into memory
+        .MEM_LOAD(MEM_LOAD),
+        .complete_IDLE(complete_IDLE),
+        .MEM_LOAD_VAL(MEM_LOAD_VAL)
+    );
+
+
+    assign en_IDLE = start; // Enable IDLE state when start is pressed
+    assign rst_IDLE = reset; // Reset IDLE state when reset is pressed
+
+    // All output pins must be assigned. If not used, assign to 0.
+    assign uo_out  = MEM_IN;
+    assign uio_oe  = 8'b1111_1111; // All uio_out pins are outputs
+    assign uio_out = {7'b0, complete_IDLE};
 endmodule
